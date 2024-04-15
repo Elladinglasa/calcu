@@ -1,0 +1,143 @@
+using Android.App;
+using Android.OS;
+using Android.Runtime;
+using Android.Widget;
+using AndroidX.AppCompat.App;
+using Android.Content;
+using Android.Icu.Text;
+using Javax.Security.Auth;
+using Android;
+
+
+namespace sample
+{
+    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
+    public class MainActivity : AppCompatActivity
+    {
+        TextView resultTextView;
+
+        double operand1 = 0;
+        double operand2 = 0;
+        string operatorPressed = "";
+        protected override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+            Xamarin.Essentials.Platform.Init(this, savedInstanceState);
+            // Set our view from the "main" layout resource
+            SetContentView(Resource.Layout.activity_main);
+
+            resultTextView = FindViewById<TextView>(Resource.Id.answerbutton);
+
+            //all button numbers
+            FindViewById<Button>(Resource.Id.btnone).Click += Button_Click;
+            FindViewById<Button>(Resource.Id.btntwo).Click += Button_Click;
+            FindViewById<Button>(Resource.Id.btnthree).Click += Button_Click;
+            FindViewById<Button>(Resource.Id.btnfour).Click += Button_Click;
+            FindViewById<Button>(Resource.Id.btnfive).Click += Button_Click;
+            FindViewById<Button>(Resource.Id.btnsix).Click += Button_Click;
+            FindViewById<Button>(Resource.Id.btnseven).Click += Button_Click;
+            FindViewById<Button>(Resource.Id.btneight).Click += Button_Click;
+            FindViewById<Button>(Resource.Id.btnnine).Click += Button_Click;
+            FindViewById<Button>(Resource.Id.btnzero).Click += Button_Click;
+            FindViewById<Button>(Resource.Id.btnpoint).Click += Button_Click;
+
+
+            //all button operators
+
+            FindViewById<Button>(Resource.Id.btnplus).Click += Operator_Click;
+            FindViewById<Button>(Resource.Id.btntimes).Click += Operator_Click;
+            FindViewById<Button>(Resource.Id.btnminus).Click += Operator_Click;
+            FindViewById<Button>(Resource.Id.btndivide).Click += Operator_Click;
+            FindViewById<Button>(Resource.Id.btnpercent).Click += Operator_Click;
+
+            //other buttons
+            FindViewById<Button>(Resource.Id.btnclear).Click += Clear_Click;
+            FindViewById<Button>(Resource.Id.btndelete).Click += Delete_Click;
+            FindViewById<Button>(Resource.Id.btnequals).Click += Equals_Click;
+
+        }
+
+        private void Button_Click(object sender, System.EventArgs e)
+
+        {
+            Button button = (Button)sender;
+            string buttonText = button.Text;
+
+            //clicked number to text view
+            resultTextView.Text = buttonText;
+        }
+
+        private void Operator_Click(object sender, System.EventArgs e)
+        {
+            Button button = (Button)sender;
+            string buttonText = button.Text;
+
+            operatorPressed = buttonText;
+            operand1 = double.Parse(resultTextView.Text);
+            resultTextView.Text = ""; //clear
+
+        }
+
+        private void Equals_Click(object sender, System.EventArgs e)
+        {
+            operand2 = double.Parse(resultTextView.Text);
+            double result = 0;
+            switch (operatorPressed)
+            {
+                case "+":
+                    result = operand1 + operand2;
+                    break;
+
+                case "-":
+                    result = operand1 - operand2;
+                    break;
+
+                case "x":
+                    result = operand1 * operand2;
+                    break;
+
+                case "/":
+                    if (operand2 != 0)
+                    {
+                        result = operand1 / operand2;
+                    }
+                    else
+                    {
+                        resultTextView.Text = "Error";
+                        return;
+                    }
+
+
+                    break;
+                case "%":
+                    result = operand1 % operand2;
+                    break;
+            }
+
+            resultTextView.Text = result.ToString();
+        }
+        private void Clear_Click(object sender, System.EventArgs e)
+        {
+            resultTextView.Text = "";
+
+        }
+        private void Delete_Click(object sender, System.EventArgs e)
+
+        {
+            if (resultTextView.Text.Length > 0)
+            {
+                resultTextView.Text = resultTextView.Text.Substring(0, resultTextView.Text.Length - 1);
+            }
+
+
+        }
+
+    }
+
+
+
+
+}
+
+
+
